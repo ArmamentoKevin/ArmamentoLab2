@@ -28,8 +28,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,9 +66,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier) {
 
-    // Stores the Follow button's current state
-    var isFollowing by remember {
+    // Stores the Follow state and preserves it during rotation
+    var isFollowing by rememberSaveable {
         mutableStateOf(false)
+    }
+
+    // Stores the current profile view count
+    var viewCount by remember {
+        mutableIntStateOf(143)
     }
 
     // Arranges the profile elements vertically and centers them
@@ -159,7 +166,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             // Creates the Message button
             Button(
                 onClick = {
-                    // Message functionality can be added later.
+                    // Message functionality can be added later
                 },
                 shape = RoundedCornerShape(
                     ProfileSizes.ButtonCornerRadius
@@ -178,24 +185,67 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.width(ProfileSpacing.ButtonSpacing)
             )
 
-            // Creates the interactive Follow button.
-            OutlinedButton(
-                onClick = {
+            // Creates the hoisted Follow button
+            FollowButton(
+                isFollowing = isFollowing,
+                onToggle = {
                     isFollowing = !isFollowing
-                },
-                shape = RoundedCornerShape(
-                    ProfileSizes.ButtonCornerRadius
-                )
-            ) {
-                Text(
-                    text = if (isFollowing) {
-                        "Following"
-                    } else {
-                        "Follow"
-                    },
-                    fontSize = ProfileTextSizes.Button
-                )
+                }
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(ProfileSpacing.ButtonToCounter)
+        )
+
+        // Displays the profile view counter
+        Counter(
+            viewCount = viewCount,
+            onIncrement = {
+                viewCount++
             }
+        )
+    }
+}
+
+// Creates a Follow button controlled by the parent state
+@Composable
+fun FollowButton(
+    isFollowing: Boolean,
+    onToggle: () -> Unit
+) {
+
+    if (isFollowing) {
+
+        // Shows an outlined button when already following
+        OutlinedButton(
+            onClick = onToggle,
+            shape = RoundedCornerShape(
+                ProfileSizes.ButtonCornerRadius
+            )
+        ) {
+            Text(
+                text = "Following",
+                fontSize = ProfileTextSizes.Button
+            )
+        }
+
+    } else {
+
+        // Shows a filled button when not following
+        Button(
+            onClick = onToggle,
+            shape = RoundedCornerShape(
+                ProfileSizes.ButtonCornerRadius
+            ),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = ProfileColors.PrimaryButton
+            )
+        ) {
+            Text(
+                text = "Follow",
+                fontSize = ProfileTextSizes.Button
+            )
         }
     }
 }
@@ -207,7 +257,7 @@ fun ContactRow(
     text: String
 ) {
 
-    // Arranges the contact icon and text horizontally.
+    // Arranges the contact icon and text horizontally
     Row(
         modifier = Modifier.width(ProfileSizes.ContactRow),
         verticalAlignment = Alignment.CenterVertically
@@ -227,16 +277,53 @@ fun ContactRow(
     }
 }
 
+// Creates a small counter for profile views
+@Composable
+fun Counter(
+    viewCount: Int,
+    onIncrement: () -> Unit
+) {
+
+    // Arranges the counter elements vertically
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        // Displays the current number of profile views
+        Text(
+            text = "Profile views: $viewCount",
+            fontSize = ProfileTextSizes.Contact,
+            color = ProfileColors.ContactText
+        )
+
+        Spacer(
+            modifier = Modifier.height(ProfileSpacing.CounterTextToButton)
+        )
+
+        // Increases the profile view count
+        Button(
+            onClick = onIncrement,
+            shape = RoundedCornerShape(
+                ProfileSizes.ButtonCornerRadius
+            )
+        ) {
+            Text(
+                text = "+1",
+                fontSize = ProfileTextSizes.Button
+            )
+        }
+    }
+}
+
 // Displays a preview of the profile screen in Android Studio
 @Preview(
     showBackground = true,
     showSystemUi = true
 )
-
-// Applies the application's theme to the preview.
 @Composable
 fun ProfileScreenPreview() {
 
+    // Applies the application's theme to the preview
     ArmamentoKevinLab2Theme {
         ProfileScreen()
     }

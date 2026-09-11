@@ -5,12 +5,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/*
- * Profile screen colors.
- */
+// Profile screen colors
 object ProfileColors {
 
-    val Background = Color(0xFFF9F7FC)
+    val Background = Color(0xFFEAF4FB)
     val Name = Color(0xFF202020)
     val SecondaryText = Color(0xFF68687A)
     val ContactText = Color(0xFF424252)
@@ -18,9 +16,7 @@ object ProfileColors {
     val PrimaryButton = Color(0xFF6073A3)
 }
 
-/*
- * Font sizes used on the profile screen.
- */
+// Font sizes used on the profile screen
 object ProfileTextSizes {
 
     val Name = 24.sp
@@ -29,17 +25,13 @@ object ProfileTextSizes {
     val Button = 14.sp
 }
 
-/*
- * Font weights used on the profile screen.
- */
+// Font weights used on the profile screen
 object ProfileFontWeights {
 
     val Name = FontWeight.Bold
 }
 
-/*
- * Padding and spacing used throughout the profile screen.
- */
+// Padding and spacing used throughout the profile screen
 object ProfileSpacing {
 
     val ScreenPadding = 24.dp
@@ -50,11 +42,11 @@ object ProfileSpacing {
     val ContactToButtons = 22.dp
     val ButtonSpacing = 12.dp
     val IconToText = 9.dp
+    val ButtonToCounter = 16.dp
+    val CounterTextToButton = 8.dp
 }
 
-/*
- * Component sizes used on the profile screen.
- */
+// Component sizes used on the profile screen
 object ProfileSizes {
 
     val Avatar = 120.dp
